@@ -1,9 +1,7 @@
 package com.testenterprise.controller;
 
 import com.testenterprise.Book;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1")
@@ -16,5 +14,15 @@ public class BookController {
                 "J.K",
                 1
         );
+    }
+
+    @PostMapping(value = "/book")
+    public Book saveBook(@RequestBody Book book) {
+        return Book
+                .builder()
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .number(book.getNumber())
+                .build();
     }
 }
