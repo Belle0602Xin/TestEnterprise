@@ -25,4 +25,18 @@ public class BookController {
                 .number(book.getNumber())
                 .build();
     }
+
+    @DeleteMapping(value = "/book/{id}")
+    public void deleteBook(@PathVariable int id) {
+    }
+
+    @PatchMapping(value = "/book/{id}")
+    public Book updateBook(@PathVariable int id, @RequestBody Book book) {
+        return Book
+                .builder()
+                .title("Harry Potter")
+                .author("J.K")
+                .number(book.getNumber())
+                .build();
+    }
 }
