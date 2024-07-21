@@ -64,4 +64,30 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.number").value(95))
         ;
     }
+
+    @Test
+    void testDeleteBooks() throws Exception {
+        mockMvc.perform(
+                        delete(version + "/book/1")
+                                .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUpdateBooks() throws Exception {
+        mockMvc.perform(
+                        patch(version + "/book/2")
+                                .accept(APPLICATION_JSON_VALUE)
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(
+                                        Book.builder().number(100).build()
+                                ))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Harry Potter"))
+                .andExpect(jsonPath("$.author").value("J.K"))
+                .andExpect(jsonPath("$.number").value(100))
+        ;
+    }
 }
