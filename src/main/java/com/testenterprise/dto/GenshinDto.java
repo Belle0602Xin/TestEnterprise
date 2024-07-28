@@ -1,4 +1,4 @@
-package com.testenterprise;
+package com.testenterprise.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class Genshin {
+public class GenshinDto {
 
     private String elementType;
     private String name;

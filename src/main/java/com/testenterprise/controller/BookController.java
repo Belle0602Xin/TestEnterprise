@@ -1,6 +1,6 @@
 package com.testenterprise.controller;
 
-import com.testenterprise.Book;
+import com.testenterprise.dto.BookDto;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     @GetMapping(value = "/book")
-    public Book getBooks() {
-        return new Book(
+    public BookDto getBooks() {
+        return new BookDto(
                 "Harry Potter",
                 "J.K",
                 1
@@ -17,8 +17,8 @@ public class BookController {
     }
 
     @PostMapping(value = "/book")
-    public Book saveBook(@RequestBody Book book) {
-        return Book
+    public BookDto saveBook(@RequestBody BookDto book) {
+        return BookDto
                 .builder()
                 .title(book.getTitle())
                 .author(book.getAuthor())
@@ -31,8 +31,8 @@ public class BookController {
     }
 
     @PatchMapping(value = "/book/{id}")
-    public Book updateBook(@PathVariable int id, @RequestBody Book book) {
-        return Book
+    public BookDto updateBook(@PathVariable int id, @RequestBody BookDto book) {
+        return BookDto
                 .builder()
                 .title("Harry Potter")
                 .author("J.K")
