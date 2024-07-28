@@ -1,4 +1,4 @@
-package com.testenterprise;
+package com.testenterprise.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class Book {
+public class BookDto {
 
     private String title;
     private String author;

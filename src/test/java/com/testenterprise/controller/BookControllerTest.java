@@ -1,13 +1,12 @@
 package com.testenterprise.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testenterprise.Book;
+import com.testenterprise.dto.BookDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,7 +50,7 @@ public class BookControllerTest {
                                 .accept(APPLICATION_JSON_VALUE)
                                 .contentType(APPLICATION_JSON_VALUE)
                                 .content(objectMapper.writeValueAsString(
-                                        new Book(
+                                        new BookDto(
                                                 "One Piece",
                                                 "Wei Tian",
                                                 95
@@ -81,7 +80,7 @@ public class BookControllerTest {
                                 .accept(APPLICATION_JSON_VALUE)
                                 .contentType(APPLICATION_JSON_VALUE)
                                 .content(objectMapper.writeValueAsString(
-                                        Book.builder().number(100).build()
+                                        BookDto.builder().number(100).build()
                                 ))
                 )
                 .andExpect(status().isOk())
