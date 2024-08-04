@@ -25,4 +25,9 @@ public class GenshinService {
 
         return genshinMapper.toGenshinDto(genshinEntity);
     }
+
+    public void saveGenshin(GenshinDto genshinDto) {
+        GenshinEntity genshinEntity = genshinMapper.toGenshinEntity(genshinDto);
+        genshinRepository.save(genshinEntity);
+    }
 }
