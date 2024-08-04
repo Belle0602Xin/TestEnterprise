@@ -1,6 +1,7 @@
 package com.testenterprise.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testenterprise.dto.BookDto;
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.service.GenshinService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +14,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,8 +36,18 @@ public class GenshinControllerTest {
 
     private final String version = "/v1";
 
+    private GenshinDto genshinDto;
+
     @BeforeEach
     public void setup() {
+        genshinDto = GenshinDto
+                .builder()
+                .name("Ying")
+                .elementType("Lei")
+                .equipmentType("Jue Yuan")
+                .skill("Wu Xiang De Yi Dao")
+                .weaponType("Chang qiang")
+                .build();
     }
 
     @Test
@@ -58,5 +69,22 @@ public class GenshinControllerTest {
                 .andExpect(jsonPath("$.weaponType").value("Chang qiang"));
 
         verify(genshinService).getGenshin("1");
+    }
+
+    @Test
+    void testSaveGenshin() throws Exception {
+        doNothing().when(genshinService).saveGenshin(any());
+
+        mockMvc.perform(
+                        post(version + "/genshin")
+                                .accept(APPLICATION_JSON_VALUE)
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(
+                                        genshinDto
+                                ))
+                )
+                .andExpect(status().isOk());
+
+        verify(genshinService).saveGenshin(genshinDto);
     }
 }

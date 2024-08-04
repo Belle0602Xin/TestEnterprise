@@ -65,4 +65,15 @@ public class GenshinServiceTest {
 
         assertThat(actual).isEqualTo(genshinDto);
     }
+
+    @Test
+    void testSaveGenshin() {
+        when(genshinMapper.toGenshinEntity(any())).thenReturn(genshinEntity);
+        when(genshinRepository.save(any())).thenReturn(genshinEntity);
+
+        subject.saveGenshin(genshinDto);
+
+        verify(genshinMapper).toGenshinEntity(genshinDto);
+        verify(genshinRepository).save(genshinEntity);
+    }
 }
