@@ -2,6 +2,7 @@ package com.testenterprise.service;
 
 
 import com.testenterprise.dto.GenshinDto;
+import com.testenterprise.dto.request.GenshinPatchRequest;
 import com.testenterprise.entity.GenshinEntity;
 import com.testenterprise.mapper.GenshinMapper;
 import com.testenterprise.repository.GenshinRepository;
@@ -30,11 +31,15 @@ public class GenshinServiceTest {
     private GenshinMapper genshinMapper;
 
     private GenshinEntity genshinEntity;
+    private GenshinEntity patchedGenshinEntity;
     private GenshinDto genshinDto;
+    private GenshinPatchRequest genshinPatchRequest;
+    private String id;
 
     @BeforeEach
     void setUp() throws Exception {
         subject = new GenshinService(genshinRepository, genshinMapper);
+        id = "1";
         genshinEntity = GenshinEntity
                 .builder()
                 .name("Ying")
@@ -51,6 +56,19 @@ public class GenshinServiceTest {
                 .skill("Wu Xiang De Yi Dao")
                 .weaponType("Chang qiang")
                 .build();
+        genshinPatchRequest = GenshinPatchRequest
+                .builder()
+                .name("Wendi")
+                .skill("Xiyiji")
+                .build();
+        patchedGenshinEntity = GenshinEntity
+                .builder()
+                .name("Wendi")
+                .elementType("Lei")
+                .equipmentType("Jue Yuan")
+                .skill("Xiyiji")
+                .weaponType("Chang qiang")
+                .build();
     }
 
     @Test
@@ -58,9 +76,9 @@ public class GenshinServiceTest {
         when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
         when(genshinMapper.toGenshinDto(any())).thenReturn(genshinDto);
 
-        GenshinDto actual = subject.getGenshin("1");
+        GenshinDto actual = subject.getGenshin(id);
 
-        verify(genshinRepository).findById("1");
+        verify(genshinRepository).findById(id);
         verify(genshinMapper).toGenshinDto(genshinEntity);
 
         assertThat(actual).isEqualTo(genshinDto);
@@ -75,5 +93,16 @@ public class GenshinServiceTest {
 
         verify(genshinMapper).toGenshinEntity(genshinDto);
         verify(genshinRepository).save(genshinEntity);
+    }
+
+    @Test
+    void testPatchGenshin() {
+        when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
+        when(genshinRepository.save(any())).thenReturn(patchedGenshinEntity);
+
+        subject.patchGenshin(genshinPatchRequest, id);
+
+        verify(genshinRepository).findById(id);
+        verify(genshinRepository).save(patchedGenshinEntity);
     }
 }
