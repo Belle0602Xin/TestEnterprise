@@ -41,4 +41,8 @@ public class GenshinService {
 
         genshinRepository.save(genshinEntity);
     }
+
+    public void deleteGenshin(String id) {
+        genshinRepository.deleteById(id);
+    }
 }

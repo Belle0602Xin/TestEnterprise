@@ -99,7 +99,6 @@ public class GenshinControllerTest {
 
     @Test
     void testPatchGenshin() throws Exception {
-
         doNothing().when(genshinService).patchGenshin(any(), any());
 
         mockMvc.perform(
@@ -109,8 +108,22 @@ public class GenshinControllerTest {
                         .content(objectMapper.writeValueAsString(
                                genshinPatchRequest)
                         )
-        ).andExpect(status().isOk());
+        )
+                .andExpect(status().isOk());
 
         verify(genshinService).patchGenshin(genshinPatchRequest, id);
+    }
+
+    @Test
+    void testDeleteGenshin() throws Exception {
+        doNothing().when(genshinService).deleteGenshin(any());
+
+        mockMvc.perform(
+                delete(version + "/genshin/" + id)
+                        .contentType(APPLICATION_JSON_VALUE)
+        )
+                .andExpect(status().isOk());
+
+        verify(genshinService).deleteGenshin(id);
     }
 }

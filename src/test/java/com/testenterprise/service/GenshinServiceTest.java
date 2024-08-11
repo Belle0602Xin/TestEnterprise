@@ -16,8 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class GenshinServiceTest {
@@ -104,5 +103,14 @@ public class GenshinServiceTest {
 
         verify(genshinRepository).findById(id);
         verify(genshinRepository).save(patchedGenshinEntity);
+    }
+
+    @Test
+    void testDeleteGenshin() {
+        doNothing().when(genshinRepository).deleteById(any());
+
+        subject.deleteGenshin(id);
+
+        verify(genshinRepository).deleteById(id);
     }
 }

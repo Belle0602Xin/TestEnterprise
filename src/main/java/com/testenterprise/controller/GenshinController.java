@@ -29,4 +29,9 @@ public class GenshinController {
     public void patchGenshin(@PathVariable String id, @RequestBody GenshinPatchRequest genshinPatchRequest) {
         genshinService.patchGenshin(genshinPatchRequest, id);
     }
+
+    @DeleteMapping(value = "/genshin/{id}")
+    public void deleteGenshin(@PathVariable String id) {
+        genshinService.deleteGenshin(id);
+    }
 }
