@@ -3,6 +3,7 @@ package com.testenterprise.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testenterprise.dto.BookDto;
 import com.testenterprise.dto.GenshinDto;
+import com.testenterprise.dto.request.GenshinPatchRequest;
 import com.testenterprise.service.GenshinService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,9 +37,12 @@ public class GenshinControllerTest {
     private final String version = "/v1";
 
     private GenshinDto genshinDto;
+    private GenshinPatchRequest genshinPatchRequest;
+    private String id;
 
     @BeforeEach
     public void setup() {
+        id = "1";
         genshinDto = GenshinDto
                 .builder()
                 .name("Ying")
@@ -47,6 +50,12 @@ public class GenshinControllerTest {
                 .equipmentType("Jue Yuan")
                 .skill("Wu Xiang De Yi Dao")
                 .weaponType("Chang qiang")
+                .build();
+
+        genshinPatchRequest = GenshinPatchRequest
+                .builder()
+                .name("Wendi")
+                .skill("Feng")
                 .build();
     }
 
@@ -58,7 +67,7 @@ public class GenshinControllerTest {
         );
 
         mockMvc.perform(
-                        get(version + "/genshin/1")
+                        get(version + "/genshin/" + id)
                                 .contentType(APPLICATION_JSON_VALUE)
                 )
                 .andExpect(status().isOk())
@@ -68,7 +77,7 @@ public class GenshinControllerTest {
                 .andExpect(jsonPath("$.skill").value("Wu Xiang De Yi Dao"))
                 .andExpect(jsonPath("$.weaponType").value("Chang qiang"));
 
-        verify(genshinService).getGenshin("1");
+        verify(genshinService).getGenshin(id);
     }
 
     @Test
@@ -86,5 +95,22 @@ public class GenshinControllerTest {
                 .andExpect(status().isOk());
 
         verify(genshinService).saveGenshin(genshinDto);
+    }
+
+    @Test
+    void testPatchGenshin() throws Exception {
+
+        doNothing().when(genshinService).patchGenshin(any(), any());
+
+        mockMvc.perform(
+                patch(version + "/genshin/" + id)
+                        .accept(APPLICATION_JSON_VALUE)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(
+                               genshinPatchRequest)
+                        )
+        ).andExpect(status().isOk());
+
+        verify(genshinService).patchGenshin(genshinPatchRequest, id);
     }
 }

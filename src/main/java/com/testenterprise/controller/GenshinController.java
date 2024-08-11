@@ -1,6 +1,7 @@
 package com.testenterprise.controller;
 
 import com.testenterprise.dto.GenshinDto;
+import com.testenterprise.dto.request.GenshinPatchRequest;
 import com.testenterprise.service.GenshinService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,5 +23,10 @@ public class GenshinController {
     @PostMapping(value = "/genshin")
     public void saveGenshin(@RequestBody GenshinDto genshinDto) {
         genshinService.saveGenshin(genshinDto);
+    }
+
+    @PatchMapping(value = "/genshin/{id}")
+    public void patchGenshin(@PathVariable String id, @RequestBody GenshinPatchRequest genshinPatchRequest) {
+        genshinService.patchGenshin(genshinPatchRequest, id);
     }
 }
