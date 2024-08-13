@@ -2,6 +2,7 @@ package com.testenterprise.controller;
 
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
+import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.service.GenshinService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +34,10 @@ public class GenshinController {
     @DeleteMapping(value = "/genshin/{id}")
     public void deleteGenshin(@PathVariable String id) {
         genshinService.deleteGenshin(id);
+    }
+
+    @PutMapping(value = "/genshin/{id}")
+    public void putGenshin(@PathVariable String id, @RequestBody GenshinPutRequest genshinPutRequest) {
+        genshinService.putGenshin(genshinPutRequest, id);
     }
 }

@@ -2,6 +2,7 @@ package com.testenterprise.service;
 
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
+import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.entity.GenshinEntity;
 import com.testenterprise.mapper.GenshinMapper;
 import com.testenterprise.repository.GenshinRepository;
@@ -44,5 +45,18 @@ public class GenshinService {
 
     public void deleteGenshin(String id) {
         genshinRepository.deleteById(id);
+    }
+
+    public void putGenshin(GenshinPutRequest genshinPutRequest, String id) {
+        Optional<GenshinEntity> genshinEntityOptional = genshinRepository.findById(id);
+        GenshinEntity genshinEntity = genshinEntityOptional.get();
+
+        genshinEntity.setName(genshinPutRequest.getName());
+        genshinEntity.setElementType(genshinPutRequest.getElementType());
+        genshinEntity.setEquipmentType(genshinPutRequest.getEquipmentType());
+        genshinEntity.setSkill(genshinPutRequest.getSkill());
+        genshinEntity.setWeaponType(genshinPutRequest.getWeaponType());
+
+        genshinRepository.save(genshinEntity);
     }
 }

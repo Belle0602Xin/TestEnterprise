@@ -3,6 +3,7 @@ package com.testenterprise.service;
 
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
+import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.entity.GenshinEntity;
 import com.testenterprise.mapper.GenshinMapper;
 import com.testenterprise.repository.GenshinRepository;
@@ -31,8 +32,11 @@ public class GenshinServiceTest {
 
     private GenshinEntity genshinEntity;
     private GenshinEntity patchedGenshinEntity;
+    private GenshinEntity putGenshinEntity;
     private GenshinDto genshinDto;
     private GenshinPatchRequest genshinPatchRequest;
+    private GenshinPutRequest genshinPutRequest;
+
     private String id;
 
     @BeforeEach
@@ -47,6 +51,7 @@ public class GenshinServiceTest {
                 .skill("Wu Xiang De Yi Dao")
                 .weaponType("Chang qiang")
                 .build();
+
         genshinDto = GenshinDto
                 .builder()
                 .name("Ying")
@@ -55,11 +60,13 @@ public class GenshinServiceTest {
                 .skill("Wu Xiang De Yi Dao")
                 .weaponType("Chang qiang")
                 .build();
+
         genshinPatchRequest = GenshinPatchRequest
                 .builder()
                 .name("Wendi")
                 .skill("Xiyiji")
                 .build();
+
         patchedGenshinEntity = GenshinEntity
                 .builder()
                 .name("Wendi")
@@ -67,6 +74,24 @@ public class GenshinServiceTest {
                 .equipmentType("Jue Yuan")
                 .skill("Xiyiji")
                 .weaponType("Chang qiang")
+                .build();
+
+        genshinPutRequest = GenshinPutRequest
+                .builder()
+                .name("Zhongli")
+                .elementType("Yan")
+                .equipmentType("Qianyan")
+                .skill("Jushoubingxu")
+                .weaponType("Heiyingqiang")
+                .build();
+
+        putGenshinEntity = GenshinEntity
+                .builder()
+                .name("Zhongli")
+                .elementType("Yan")
+                .equipmentType("Qianyan")
+                .skill("Jushoubingxu")
+                .weaponType("Heiyingqiang")
                 .build();
     }
 
@@ -112,5 +137,16 @@ public class GenshinServiceTest {
         subject.deleteGenshin(id);
 
         verify(genshinRepository).deleteById(id);
+    }
+
+    @Test
+    void testPutGenshin() {
+        when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
+        when(genshinRepository.save(any())).thenReturn(putGenshinEntity);
+
+        subject.putGenshin(genshinPutRequest, id);
+
+        verify(genshinRepository).findById(id);
+        verify(genshinRepository).save(putGenshinEntity);
     }
 }

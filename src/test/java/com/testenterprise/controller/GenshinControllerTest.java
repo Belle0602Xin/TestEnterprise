@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testenterprise.dto.BookDto;
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
+import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.service.GenshinService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ public class GenshinControllerTest {
 
     private GenshinDto genshinDto;
     private GenshinPatchRequest genshinPatchRequest;
+    private GenshinPutRequest genshinPutRequest;
+
     private String id;
 
     @BeforeEach
@@ -56,6 +59,15 @@ public class GenshinControllerTest {
                 .builder()
                 .name("Wendi")
                 .skill("Feng")
+                .build();
+
+        genshinPutRequest = GenshinPutRequest
+                .builder()
+                .name("Zhongli")
+                .elementType("Yan")
+                .equipmentType("Qianyan")
+                .skill("Jushoubingxu")
+                .weaponType("Heiyingqiang")
                 .build();
     }
 
@@ -125,5 +137,21 @@ public class GenshinControllerTest {
                 .andExpect(status().isOk());
 
         verify(genshinService).deleteGenshin(id);
+    }
+
+    @Test
+    void testPutGenshin() throws Exception {
+        doNothing().when(genshinService).putGenshin(any(), any());
+
+        mockMvc.perform(
+                put(version + "/genshin/" + id)
+                        .accept(APPLICATION_JSON_VALUE)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(
+                                genshinPutRequest)
+                        )
+        )
+                .andExpect(status().isOk());
+        verify(genshinService).putGenshin(genshinPutRequest, id);
     }
 }
