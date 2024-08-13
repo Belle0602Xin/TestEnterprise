@@ -96,30 +96,6 @@ public class GenshinServiceTest {
     }
 
     @Test
-    void testGetGenshin() {
-        when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
-        when(genshinMapper.toGenshinDto(any())).thenReturn(genshinDto);
-
-        GenshinDto actual = subject.getGenshin(id);
-
-        verify(genshinRepository).findById(id);
-        verify(genshinMapper).toGenshinDto(genshinEntity);
-
-        assertThat(actual).isEqualTo(genshinDto);
-    }
-
-    @Test
-    void testSaveGenshin() {
-        when(genshinMapper.toGenshinEntity(any())).thenReturn(genshinEntity);
-        when(genshinRepository.save(any())).thenReturn(genshinEntity);
-
-        subject.saveGenshin(genshinDto);
-
-        verify(genshinMapper).toGenshinEntity(genshinDto);
-        verify(genshinRepository).save(genshinEntity);
-    }
-
-    @Test
     void testPatchGenshin() {
         when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
         when(genshinRepository.save(any())).thenReturn(patchedGenshinEntity);

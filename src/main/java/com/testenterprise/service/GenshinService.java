@@ -21,18 +21,6 @@ public class GenshinService {
         this.genshinMapper = genshinMapper;
     }
 
-    public GenshinDto getGenshin(String id) {
-        Optional<GenshinEntity> genshinEntityOptional = genshinRepository.findById(id);
-        GenshinEntity genshinEntity = genshinEntityOptional.get();
-
-        return genshinMapper.toGenshinDto(genshinEntity);
-    }
-
-    public void saveGenshin(GenshinDto genshinDto) {
-        GenshinEntity genshinEntity = genshinMapper.toGenshinEntity(genshinDto);
-        genshinRepository.save(genshinEntity);
-    }
-
     public void patchGenshin(GenshinPatchRequest genshinPatchRequest, String id) {
         Optional<GenshinEntity> genshinEntityOptional = genshinRepository.findById(id);
         GenshinEntity genshinEntity = genshinEntityOptional.get();
