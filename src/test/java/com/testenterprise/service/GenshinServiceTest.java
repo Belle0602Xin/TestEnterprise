@@ -125,4 +125,27 @@ public class GenshinServiceTest {
         verify(genshinRepository).findById(id);
         verify(genshinRepository).save(putGenshinEntity);
     }
+
+    @Test
+    void testGetGenshin() {
+        when(genshinRepository.findById(any())).thenReturn(Optional.ofNullable(genshinEntity));
+        when(genshinMapper.toGenshinDto(any())).thenReturn(genshinDto);
+
+        GenshinDto actual = subject.getGenshin(id);
+        assertThat(actual).isEqualTo(genshinDto);
+
+        verify(genshinRepository).findById(id);
+        verify(genshinMapper).toGenshinDto(genshinEntity);
+    }
+
+    @Test
+    void testPostGenshin() {
+        when(genshinMapper.toGenshinEntity(any())).thenReturn(genshinEntity);
+        when(genshinRepository.save(any())).thenReturn(genshinEntity);
+
+        subject.postGenshin(genshinDto);
+
+        verify(genshinMapper).toGenshinEntity(genshinDto);
+        verify(genshinRepository).save(genshinEntity);
+    }
 }

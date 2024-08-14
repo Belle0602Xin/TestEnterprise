@@ -30,4 +30,14 @@ public class GenshinController {
     public void putGenshin(@PathVariable String id, @RequestBody GenshinPutRequest genshinPutRequest) {
         genshinService.putGenshin(genshinPutRequest, id);
     }
+
+    @GetMapping(value = "/genshin/{id}")
+    public GenshinDto getGenshin(@PathVariable String id) {
+        return genshinService.getGenshin(id);
+    }
+
+    @PostMapping(value = "/genshin")
+    public void postGenshin(@RequestBody GenshinDto genshinDto) {
+       genshinService.postGenshin(genshinDto);
+    }
 }

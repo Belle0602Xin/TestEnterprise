@@ -116,4 +116,47 @@ public class GenshinControllerTest {
                 .andExpect(status().isOk());
         verify(genshinService).putGenshin(genshinPutRequest, id);
     }
+
+    @Test
+    void testGetGenshin() throws Exception {
+        when(genshinService.getGenshin(any())).thenReturn(
+                new GenshinDto(
+                        "Lei",
+                        "Ying",
+                        "Chang Qiang",
+                        "Jue Yuan",
+                        "Wu Xiang De Yi Dao")
+        );
+
+        mockMvc.perform(
+                        get(version + "/genshin/" + id)
+                                .contentType(APPLICATION_JSON_VALUE)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Ying"))
+                .andExpect(jsonPath("$.elementType").value("Lei"))
+                .andExpect(jsonPath("$.equipmentType").value("Jue Yuan"))
+                .andExpect(jsonPath("$.skill").value("Wu Xiang De Yi Dao"))
+                .andExpect(jsonPath("$.weaponType").value("Chang Qiang"));
+
+        verify(genshinService).getGenshin(id);
+    }
+
+    @Test
+    void testPostGenshin() throws Exception {
+        doNothing().when(genshinService).postGenshin(any());
+
+        mockMvc.perform(
+                        post(version + "/genshin")
+                                .accept(APPLICATION_JSON_VALUE)
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(
+                                                genshinDto
+                                        )
+                                )
+                )
+                .andExpect(status().isOk());
+
+        verify(genshinService).postGenshin(genshinDto);
+    }
 }
