@@ -47,4 +47,16 @@ public class GenshinService {
 
         genshinRepository.save(genshinEntity);
     }
+
+    public GenshinDto getGenshin(String id) {
+        Optional<GenshinEntity> genshinEntityOptional = genshinRepository.findById(id);
+        GenshinEntity genshinEntity = genshinEntityOptional.get();
+
+        return genshinMapper.toGenshinDto(genshinEntity);
+    }
+
+    public void postGenshin(GenshinDto genshinDto) {
+        GenshinEntity genshinEntity = genshinMapper.toGenshinEntity(genshinDto);
+        genshinRepository.save(genshinEntity);
+    }
 }
