@@ -4,6 +4,8 @@ import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
 import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.service.GenshinService;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,7 +39,7 @@ public class GenshinController {
     }
 
     @PostMapping(value = "/genshin")
-    public void postGenshin(@RequestBody GenshinDto genshinDto) {
-       genshinService.postGenshin(genshinDto);
+    public void postGenshin(@Valid @RequestBody GenshinDto genshinDto) {
+        genshinService.postGenshin(genshinDto);
     }
 }
