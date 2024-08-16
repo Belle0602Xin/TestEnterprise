@@ -1,12 +1,12 @@
 package com.testenterprise.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testenterprise.dto.BookDto;
 import com.testenterprise.dto.GenshinDto;
 import com.testenterprise.dto.request.GenshinPatchRequest;
 import com.testenterprise.dto.request.GenshinPutRequest;
 import com.testenterprise.service.GenshinService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,7 @@ public class GenshinControllerTest {
     private GenshinDto genshinDto;
     private GenshinPatchRequest genshinPatchRequest;
     private GenshinPutRequest genshinPutRequest;
+    private GenshinDto genshinDtoWithEmptyFields;
 
     private String id;
 
@@ -65,6 +66,13 @@ public class GenshinControllerTest {
                 .builder()
                 .name("Zhongli")
                 .elementType("Yan")
+                .equipmentType("Qianyan")
+                .skill("Jushoubingxu")
+                .weaponType("Heiyingqiang")
+                .build();
+
+        genshinDtoWithEmptyFields = GenshinDto
+                .builder()
                 .equipmentType("Qianyan")
                 .skill("Jushoubingxu")
                 .weaponType("Heiyingqiang")
@@ -151,12 +159,36 @@ public class GenshinControllerTest {
                                 .accept(APPLICATION_JSON_VALUE)
                                 .contentType(APPLICATION_JSON_VALUE)
                                 .content(objectMapper.writeValueAsString(
-                                                genshinDto
+                                        genshinDto
                                         )
                                 )
-                )
-                .andExpect(status().isOk());
+                        )
+                        .andExpect(status().isOk());
 
         verify(genshinService).postGenshin(genshinDto);
     }
+
+    @Nested
+    class ErrorHandling{
+        @Test
+        void testPostGenshinWhenRequestisBlank() throws Exception {
+            doNothing().when(genshinService).postGenshin(any());
+
+            mockMvc.perform(
+                    post(version + "/genshin")
+                        .accept(APPLICATION_JSON_VALUE)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(
+                                genshinDtoWithEmptyFields
+                                )
+                        )
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("There can't be blank!"));
+
+            verifyNoInteractions(genshinService);
+        }
+    }
 }
+
+
