@@ -169,19 +169,20 @@ public class GenshinControllerTest {
     }
 
     @Nested
-    class ErrorHandling{
+    class ErrorHandling {
+
         @Test
-        void testPostGenshinWhenRequestisBlank() throws Exception {
+        void testPostGenshinWhenRequestIsBlank() throws Exception {
             doNothing().when(genshinService).postGenshin(any());
 
             mockMvc.perform(
-                    post(version + "/genshin")
-                        .accept(APPLICATION_JSON_VALUE)
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(
-                                genshinDtoWithEmptyFields
-                                )
-                        )
+                            post(version + "/genshin")
+                                    .accept(APPLICATION_JSON_VALUE)
+                                    .contentType(APPLICATION_JSON_VALUE)
+                                    .content(objectMapper.writeValueAsString(
+                                                    genshinDtoWithEmptyFields
+                                            )
+                                    )
                     )
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("There can't be blank!"));

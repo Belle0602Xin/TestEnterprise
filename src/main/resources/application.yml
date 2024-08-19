@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: TestEnterprise
+
+genshin:
+  nata:
+    material: jingdie
+    activity: yiyong
